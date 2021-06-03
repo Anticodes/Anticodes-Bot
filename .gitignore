@@ -1,0 +1,4 @@
+.env
+usefulinfo.js
+node_modules/
+database.sqlite

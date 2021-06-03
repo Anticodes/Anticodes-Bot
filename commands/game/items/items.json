@@ -1,0 +1,123 @@
+[
+    {
+        "id": 0,
+        "name": "Water",
+        "image": "💧",
+        "item_type": "shop",
+        "cost": 1
+    },
+    {
+        "id": 1,
+        "name": "Tea leaf",
+        "image": "🌿",
+        "item_type": "shop",
+        "cost": 20
+    },
+    {
+        "id": 2,
+        "name": "Lemon",
+        "image": "🍋",
+        "item_type": "shop",
+        "cost": 100
+    },
+    {
+        "id": 3,
+        "name": "Sugar",
+        "image": "🍬",
+        "item_type": "shop",
+        "cost": 20
+    },
+    {
+        "id": 4,
+        "name": "Egg",
+        "image": "🥚",
+        "item_type": "shop",
+        "cost": 50
+    },
+    {
+        "id": 5,
+        "name": "Milk",
+        "image": "🥛",
+        "item_type": "shop",
+        "cost": 75
+    },
+    {
+        "id": 6,
+        "name": "Tomato",
+        "image": "🍅",
+        "item_type": "shop",
+        "cost": 50
+    },
+    {
+        "id": 7,
+        "name": "Lettuce",
+        "image": "🥬",
+        "item_type": "shop",
+        "cost": 40
+    },
+    {
+        "id": 8,
+        "name": "Cheese",
+        "image": "🧀",
+        "item_type": "shop",
+        "cost": 50
+    },
+    {
+        "id": 9,
+        "name": "Bread",
+        "image": "🍞",
+        "item_type": "shop",
+        "cost": 100
+    },
+    {
+        "id": 10,
+        "name": "Sandwich",
+        "image": "🥪",
+        "item_type": "recipe",
+        "recipe":[
+            {
+                "id": 9,
+                "amount": 2
+            },
+            {
+                "id": 8,
+                "amount": 1
+            },
+            {
+                "id": 7,
+                "amount": 2
+            },
+            {
+                "id": 6,
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": 11,
+        "name": "Tea",
+        "image": "🍵",
+        "item_type": "recipe",
+        "recipe":[
+            {
+                "id": 0,
+                "amount": 100
+            },
+            {
+                "id": 1,
+                "amount": 2
+            },
+            {
+                "id": 3,
+                "amount": 2
+            }
+        ]
+    },
+    {
+        "id": 990,
+        "name": "Crystal",
+        "image": "<a:crystal:805758737062166558>",
+        "item_type": "shop",
+        "cost": 1000000
+    }
+]

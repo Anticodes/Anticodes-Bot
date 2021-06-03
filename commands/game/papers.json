@@ -1,0 +1,22 @@
+[
+    {
+        "gender" : true,
+        "sentence" : "She has been killed by her husband, after he caught her in bed with her boss!",
+        "answer" : "hell"
+    },
+    {
+        "gender" : false,
+        "sentence" : "He was working as a volunteer on a food bank. They found him in his home, died from the food he stole!",
+        "answer" : "hell"
+    },
+    {
+        "gender" : true,
+        "sentence" : "She was the kindest veterinarian. Unfortunately she died after a rabid dog bit her!",
+        "answer" : "heaven"
+    },
+    {
+        "gender" : false,
+        "sentence" : "He died from old age, with all of his loved ones right beside him!",
+        "answer" : "heaven"
+    }
+]
