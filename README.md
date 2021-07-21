@@ -109,3 +109,6 @@ List of changelogs after the game
 * Check what's wrong with poll (DONE : YES) 'Don't use replaceAll for strings'
 ### Poll Emoji Fix
 * Changed regex for emoji part so it catches more
+### Youtube Music Fix
+* Updated ytdl-core to the latest version
+* Changed revealed to revealKey because it had been changed

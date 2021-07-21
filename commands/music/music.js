@@ -4,7 +4,7 @@ const { YTSearcher } = require('ytsearcher');
  
 const searcher = new YTSearcher({
     key: process.env.YOUTUBEKEY,
-    revealed: true
+    revealKey: true
 });
  
 const queue = new Map();
