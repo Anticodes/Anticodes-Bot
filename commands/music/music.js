@@ -118,7 +118,7 @@ module.exports = {
                 return;
             }
             const dispatcher = serverQueue.connection
-                .play(ytdl(song.url), { type: 'opus' })
+                .play(ytdl(song.url))
                 .on('finish', () => {
                     if (!serverQueue.loop) serverQueue.songs.shift();
                     play(serverQueue.songs[0]);
