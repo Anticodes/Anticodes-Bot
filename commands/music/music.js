@@ -52,30 +52,27 @@ module.exports = {
                 return message.channel.send("Please join a voice chat first!");
             } else {
                 let songs = [];
-                let result = await searcher.search(args.join(" "), { type: "video" });
-                try {
-                    const songInfo = await ytdl.getInfo(result.first.url);
-                    songs = [{
-                        title: songInfo.videoDetails.title,
-                        url: songInfo.videoDetails.video_url
-                    }];
-                } catch (e) {
+                const query = args.join(" ").toString();
+                if (query.match(/^(?!.*\?.*\bv=)https:\/\/www\.youtube\.com\/.*\?.*\blist=.*$/)) {
                     try {
-                        result = await searcher.search(args.join(" "), { type: "playlist" });
-                        const playList = await youtube.getPlaylist(result.first.url);
+                        const playList = await youtube.getPlaylist(query);
                         const songList = await playList.getVideos();
 
-                        for(let i = 0; i < songList.length; i++){
-                            songs.push({title: songList[i].title, url: songList[i].url});
+                        for (let i = 0; i < songList.length; i++) {
+                            songs.push({ title: songList[i].title, url: songList[i].url });
                         }
-
-                        songList.forEach(async(elem) => {
-                            const song = await elem.fetch();
-                            songs.push({
-                                title: song.title,
-                                url: song.url
-                            })
-                        })
+                    } catch (e) {
+                        console.log(e);
+                        return message.channel.send("I can't find that on youtube, maybe it's not allowed on discord!");
+                    }
+                } else {
+                    try {
+                        const result = await youtube.searchVideos(query, 1);
+                        if(result.length < 1) throw "";
+                        songs.push({
+                            title: result[0].title,
+                            url: result[0].url
+                        });
                     } catch (e) {
                         console.log(e);
                         return message.channel.send("I can't find that on youtube, maybe it's not allowed on discord!");
@@ -109,7 +106,7 @@ module.exports = {
                 } else {
                     if (serverQueue.vChannel !== vc)
                         return message.channel.send("I'm on another voice chat!");
-                    serverQueue.songs.push(song);
+                    songs.forEach(es => serverQueue.songs.push(es));
                     return message.channel.send(`The song has been added ${song.url}`);
                 }
             }
@@ -121,7 +118,7 @@ module.exports = {
                 return;
             }
             const dispatcher = serverQueue.connection
-                .play(ytdl(song.url), { bitrate: 128000 })
+                .play(ytdl(song.url), { type: 'opus' })
                 .on('finish', () => {
                     if (!serverQueue.loop) serverQueue.songs.shift();
                     play(serverQueue.songs[0]);
