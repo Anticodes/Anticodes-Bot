@@ -105,7 +105,6 @@ module.exports = {
         }
         async function play(song) {
             if (!song) {
-                console.log("rip");
                 serverQueue.vChannel.leave();
                 queue.delete(message.guild.id);
                 return;
@@ -113,7 +112,6 @@ module.exports = {
             const dispatcher = serverQueue.connection
                 .play(await ytdl(song.url), { type: "opus" })
                 .on('finish', () => {
-                    console.log("yok artik");
                     if (!serverQueue.loop) serverQueue.songs.shift();
                     play(serverQueue.songs[0]);
                 })
