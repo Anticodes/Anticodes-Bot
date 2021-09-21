@@ -112,3 +112,9 @@ List of changelogs after the game
 ### Youtube Music Fix
 * Updated ytdl-core to the latest version
 * Changed revealed to revealKey because it had been changed
+
+## Music update
+* Made an overhaul/update to the music system
+* Now supports playlists
+* Added queue command
+* Links doesn't search anymore, using the directly on ytdl
