@@ -36,6 +36,9 @@ module.exports = {
             case 'loop':
                 loop(serverQueue);
                 break;
+            case 'queue':
+                queueCmd(serverQueue);
+                break;
             default:
                 message.channel.send("There is no such command!");
         }
@@ -175,6 +178,19 @@ module.exports = {
                 return message.channel.send("I'm on another voice chat!");
             serverQueue.loop = !serverQueue.loop;
             return message.channel.send(`Loop for ${serverQueue.songs[0].title} is now ${serverQueue.loop ? '**enabled**' : '**disabled**'}`);
+        }
+        async function queueCmd(){
+            if (!message.member.voice.channel)
+                return message.channel.send("You need to join the voice chat first!");
+            if(!serverQueue)
+                return message.channel.send("Queue is empty!");
+            if (message.member.voice.channel !== serverQueue.vChannel)
+                return message.channel.send("I'm on another voice chat!");
+            const queueEmbed = new Discord.MessageEmbed()
+            .setColor('#0099ff')
+            .setTitle('Queue')
+            .setDescription(serverQueue.songs.map((song, index) => `${index+1}. ${song.title}\n`));
+            return message.channel.send(queueEmbed)
         }
     }
 }
