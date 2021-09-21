@@ -1,13 +1,7 @@
-const ytdl = require('ytdl-core');
+const ytdl = require('ytdl-core-discord');
 
-const { YTSearcher } = require('ytsearcher');
 const YouTube = require('simple-youtube-api');
 const youtube = new YouTube(process.env.YOUTUBEKEY);
-
-const searcher = new YTSearcher({
-    key: process.env.YOUTUBEKEY,
-    revealKey: true
-});
 
 const queue = new Map();
 
@@ -25,22 +19,22 @@ module.exports = {
 
         switch (command) {
             case 'play':
-                execute();
+                execute(serverQueue);
                 break;
             case 'stop':
-                stop();
+                stop(serverQueue);
                 break;
             case 'skip':
-                skip();
+                skip(serverQueue);
                 break;
             case 'pause':
-                pause();
+                pause(serverQueue);
                 break;
             case 'resume':
-                resume();
+                resume(serverQueue);
                 break;
             case 'loop':
-                loop();
+                loop(serverQueue);
                 break;
             default:
                 message.channel.send("There is no such command!");
@@ -51,34 +45,6 @@ module.exports = {
             if (!vc) {
                 return message.channel.send("Please join a voice chat first!");
             } else {
-                let songs = [];
-                const query = args.join(" ").toString();
-                if (query.match(/^(?!.*\?.*\bv=)https:\/\/www\.youtube\.com\/.*\?.*\blist=.*$/)) {
-                    try {
-                        const playList = await youtube.getPlaylist(query);
-                        const songList = await playList.getVideos();
-
-                        for (let i = 0; i < songList.length; i++) {
-                            songs.push({ title: songList[i].title, url: songList[i].url });
-                        }
-                    } catch (e) {
-                        console.log(e);
-                        return message.channel.send("I can't find that on youtube, maybe it's not allowed on discord!");
-                    }
-                } else {
-                    try {
-                        const result = await youtube.searchVideos(query, 1);
-                        if(result.length < 1) throw "";
-                        songs.push({
-                            title: result[0].title,
-                            url: result[0].url
-                        });
-                    } catch (e) {
-                        console.log(e);
-                        return message.channel.send("I can't find that on youtube, maybe it's not allowed on discord!");
-                    }
-                }
-
                 if (!serverQueue) {
                     const queueConstructor = {
                         txtChannel: message.channel,
@@ -86,44 +52,73 @@ module.exports = {
                         connection: null,
                         songs: [],
                         volume: 5,
-                        playing: true,
+                        playing: false,
                         loop: false
                     };
                     queue.set(message.guild.id, queueConstructor);
                     serverQueue = queue.get(message.guild.id);
-
-                    songs.forEach(es => serverQueue.songs.push(es));
-
+                } else if (serverQueue.vChannel !== vc)
+                    return message.channel.send("I'm on another voice chat!");
+                const query = args.join(" ").toString();
+                if (query.match(/^https:\/\/www\.youtube\.com\/.*\?.*\blist=.*$/)) {
                     try {
+                        const playList = await youtube.getPlaylist(query);
+                        const songList = await playList.getVideos();
+
+                        for (let i = 0; i < songList.length; i++) {
+                            serverQueue.songs.push({ title: songList[i].title, url: `https://youtu.be/${songList[i].id}` });
+                        }
+
+                        queue.set(message.guild.id, serverQueue);
+
+                        message.channel.send(`Playlist **${playList.title}** has been added to the queue!`);
+                    } catch (e) {
+                        console.log(e);
+                        return message.channel.send("I can't find that on youtube, maybe it's not allowed on discord!");
+                    }
+                } else {
+                    try {
+                        const result = query.match(/^(http(s)?:\/\/)?((w){3}.)?youtu(be|.be)?(\.com)?\/.+/) ? [await youtube.getVideo(query)] : await youtube.searchVideos(query, 1);
+                        if (result.length < 1) throw "";
+                        serverQueue.songs.push({
+                            title: result[0].title,
+                            url: `https://youtu.be/${result[0].id}`
+                        });
+                        message.channel.send(`Song **${result[0].title}** has been added to the queue!`);
+                    } catch (e) {
+                        console.log(e);
+                        return message.channel.send("I can't find that on youtube, maybe it's not allowed on discord!");
+                    }
+                }
+                try {
+                    if (!serverQueue.connection || !serverQueue.playing) {
                         let connection = await vc.join();
                         serverQueue.connection = connection;
                         play(serverQueue.songs[0]);
-                    } catch (err) {
-                        console.error(err);
-                        queue.delete(message.guild.id);
-                        return message.channel.send(`Unable to join the voice chat ${err}`);
                     }
-                } else {
-                    if (serverQueue.vChannel !== vc)
-                        return message.channel.send("I'm on another voice chat!");
-                    songs.forEach(es => serverQueue.songs.push(es));
-                    return message.channel.send(`The song has been added ${song.url}`);
+                } catch (err) {
+                    console.error(err);
+                    queue.delete(message.guild.id);
+                    return message.channel.send(`Unable to join the voice chat ${err}`);
                 }
             }
         }
         async function play(song) {
             if (!song) {
+                console.log("rip");
                 serverQueue.vChannel.leave();
                 queue.delete(message.guild.id);
                 return;
             }
             const dispatcher = serverQueue.connection
-                .play(ytdl(song.url))
+                .play(await ytdl(song.url), { type: "opus" })
                 .on('finish', () => {
+                    console.log("yok artik");
                     if (!serverQueue.loop) serverQueue.songs.shift();
                     play(serverQueue.songs[0]);
                 })
                 .on("error", error => console.error(error));
+            serverQueue.playing = true;
             dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
             serverQueue.txtChannel.send(`Now playing ${serverQueue.songs[0].url}`);
         }
