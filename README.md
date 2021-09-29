@@ -117,4 +117,6 @@ List of changelogs after the game
 * Made an overhaul/update to the music system
 * Now supports playlists
 * Added queue command
-* Links doesn't search anymore, using the directly on ytdl
+* Links doesn't search anymore, using them directly on ytdl
+* Join and leave commands were added
+* Bot leaves after 120 seconds (2 minutes) of inactivity
