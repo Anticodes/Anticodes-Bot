@@ -148,10 +148,9 @@ module.exports = {
                 dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
                 serverQueue.txtChannel.send(`Now playing ${serverQueue.songs[0].url}`);
             }catch(e){
-                serverQueue.vChannel.leave();
-                queue.delete(message.guild.id);
-                serverQueue = null;
-                return message.channel.send("There was a major error, try playing again!")
+                serverQueue.songs.shift();
+                play(serverQueue.songs[0]);
+                return message.channel.send("Skipping the song because of an error!");
             }
         }
         async function stop() {

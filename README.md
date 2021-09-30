@@ -121,3 +121,4 @@ List of changelogs after the game
 * Join and leave commands were added
 * Bot leaves after 120 seconds (2 minutes) of inactivity
 * Fixed a bug caused by an incompleted line of code
+* Now skips the songs that are private
