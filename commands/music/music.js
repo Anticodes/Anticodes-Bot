@@ -82,7 +82,6 @@ module.exports = {
                     const songList = await playList.getVideos();
 
                     for (let i = 0; i < songList.length; i++) {
-                        songList[i].
                         serverQueue.songs.push({ title: songList[i].title, url: `https://youtu.be/${songList[i].id}` });
                     }
 
@@ -129,6 +128,7 @@ module.exports = {
                         serverQueue = null;
                         return message.channel.send(`I've left because of inactivity!`);
                     }, 120000);
+                    queue.set(message.guild.id, serverQueue);
                     return;
                 }
                 const dispatcher = serverQueue.connection
@@ -144,6 +144,7 @@ module.exports = {
                     });
                 serverQueue.songsEmpty = false;
                 serverQueue.playing = true;
+                queue.set(message.guild.id, serverQueue);
                 dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
                 serverQueue.txtChannel.send(`Now playing ${serverQueue.songs[0].url}`);
             }catch(e){
