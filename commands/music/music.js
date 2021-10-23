@@ -131,6 +131,7 @@ module.exports = {
                         serverQueue = null;
                         return message.channel.send(`I've left because of inactivity!`);
                     }, 120000);
+                    serverQueue.playing = false;
                     queue.set(message.guild.id, serverQueue);
                     return;
                 }
