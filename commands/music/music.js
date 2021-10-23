@@ -107,9 +107,12 @@ module.exports = {
                 }
             }
             try {
-                if (!serverQueue.connection || !serverQueue.playing) {
+                if(!serverQueue.connection){
                     let connection = await vc.join();
                     serverQueue.connection = connection;
+                    queue.set(message.guild.id, serverQueue);
+                }
+                if (!serverQueue.playing) {                    
                     play(serverQueue.songs[0]);
                 }
             } catch (err) {

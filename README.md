@@ -122,3 +122,5 @@ List of changelogs after the game
 * Bot leaves after 120 seconds (2 minutes) of inactivity
 * Fixed a bug caused by an incompleted line of code
 * Now skips the songs that are private
+### Music Fix
+* Song that are added afterwards are not playing once the queue gets empty
