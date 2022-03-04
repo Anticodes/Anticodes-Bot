@@ -126,3 +126,4 @@ List of changelogs after the game
 * Song that are added afterwards are not playing once the queue gets empty
 ### Update
 * Updated ytdl-core to the latest version
+* Fixed a problem with canvas
