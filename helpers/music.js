@@ -7,12 +7,6 @@ const youtube = new YouTube(process.env.YOUTUBEKEY);
 const queue = new Map();
 
 module.exports = {
-    name: 'music',
-    desc: 'Music commands',
-    dir: 'music',
-    args: true,
-    usage: "<play|stop|skip|pause|resume> <*link|*search terms>\n*Only needed if you've used play.",
-    guildOnly: true,
     async execute(message, args) {
 
         let serverQueue = queue.get(message.guild.id);
@@ -107,12 +101,12 @@ module.exports = {
                 }
             }
             try {
-                if(!serverQueue.connection){
+                if (!serverQueue.connection) {
                     let connection = await vc.join();
                     serverQueue.connection = connection;
                     queue.set(message.guild.id, serverQueue);
                 }
-                if (!serverQueue.playing) {                    
+                if (!serverQueue.playing) {
                     play(serverQueue.songs[0]);
                 }
             } catch (err) {
@@ -122,7 +116,7 @@ module.exports = {
             }
         }
         async function play(song) {
-            try{
+            try {
                 if (!song) {
                     serverQueue.timeout = setTimeout(() => {
                         if (!serverQueue) return;
@@ -151,7 +145,7 @@ module.exports = {
                 queue.set(message.guild.id, serverQueue);
                 dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
                 serverQueue.txtChannel.send(`Now playing ${serverQueue.songs[0].url}`);
-            }catch(e){
+            } catch (e) {
                 serverQueue.songs.shift();
                 play(serverQueue.songs[0]);
                 return message.channel.send("Skipping the song because of an error!");

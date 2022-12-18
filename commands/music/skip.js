@@ -1,14 +1,15 @@
-const music = require('./music.js');
+const { SlashCommandBuilder } = require('discord.js');
+const music = require('../../helpers/music.js');
 
 module.exports = {
-    name: 'skip',
-    aliases: ['gec', 'atla'],
-    desc: 'Skips the song and continues from the queue.',
     dir: 'music',
-    args: false,
-    guildOnly: true,
-    async execute (message, args){
-        args.unshift(this.name);
-        music.execute(message, args);
+    data: new SlashCommandBuilder()
+        .setName("skip")
+        .setNameLocalization("tr", "atla")
+        .setDescription("Skips the song and continues from the queue")
+        .setDescriptionLocalization("tr", "Şarkıyı atlar ve sıradaki şarkıdan devam eder")
+        .setDMPermission(false),
+    async execute(interaction) {
+        music.execute(interaction, ["skip"]);
     }
 }

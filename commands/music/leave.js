@@ -1,14 +1,15 @@
-const music = require('./music.js');
+const { SlashCommandBuilder } = require('discord.js');
+const music = require('../../helpers/music.js');
 
 module.exports = {
-    name: 'leave',
-    aliases: ['ayril'],
-    desc: 'Makes the bot leave the channel.',
     dir: 'music',
-    args: false,
-    guildOnly: true,
-    async execute (message, args){
-        args.unshift(this.name);
-        music.execute(message, args);
+    data: new SlashCommandBuilder()
+        .setName("leave")
+        .setNameLocalization("tr", "ayrıl")
+        .setDescription("Makes the bot leave the channel that you're in")
+        .setDescriptionLocalization("tr", "Bot bulunduğunuz kanaldan ayrılır")
+        .setDMPermission(false),
+    async execute(interaction) {
+        music.execute(interaction, ["leave"]);
     }
 }

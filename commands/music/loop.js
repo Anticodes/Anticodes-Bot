@@ -1,14 +1,15 @@
-const music = require('./music.js');
+const { SlashCommandBuilder } = require('discord.js');
+const music = require('../../helpers/music.js');
 
 module.exports = {
-    name: 'loop',
-    aliases: ['tekrar'],
-    desc: 'Loops the current song.',
     dir: 'music',
-    args: false,
-    guildOnly: true,
-    async execute (message, args){
-        args.unshift(this.name);
-        music.execute(message, args);
+    data: new SlashCommandBuilder()
+        .setName("loop")
+        .setNameLocalization("tr", "tekrar")
+        .setDescription("Loops the current song")
+        .setDescriptionLocalization("tr", "Çalan şarkıyı tekrar eder")
+        .setDMPermission(false),
+    async execute(interaction) {
+        music.execute(interaction, ["loop"]);
     }
 }

@@ -1,14 +1,15 @@
-const music = require('./music.js');
+const { SlashCommandBuilder } = require('discord.js');
+const music = require('../../helpers/music.js');
 
 module.exports = {
-    name: 'join',
-    aliases: ['katil'],
-    desc: 'Makes the bot join the channel.',
     dir: 'music',
-    args: false,
-    guildOnly: true,
-    async execute (message, args){
-        args.unshift(this.name);
-        music.execute(message, args);
+    data: new SlashCommandBuilder()
+        .setName("join")
+        .setNameLocalization("tr", "katıl")
+        .setDescription("Makes the bot join the channel that you're currently in")
+        .setDescriptionLocalization("tr", "Bot bulunduğunuz kanala katılır")
+        .setDMPermission(false),
+    async execute(interaction) {
+        music.execute(interaction, ["join"]);
     }
 }

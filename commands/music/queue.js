@@ -1,14 +1,15 @@
-const music = require('./music.js');
+const { SlashCommandBuilder } = require('discord.js');
+const music = require('../../helpers/music.js');
 
 module.exports = {
-    name: 'queue',
-    aliases: ['sira', 'q'],
-    desc: 'Displays the current songs in the queue.',
     dir: 'music',
-    args: false,
-    guildOnly: true,
-    async execute (message, args){
-        args.unshift(this.name);
-        music.execute(message, args);
+    data: new SlashCommandBuilder()
+        .setName("queue")
+        .setNameLocalization("tr", "sira")
+        .setDescription("Displays the current songs in the queue")
+        .setDescriptionLocalization("tr", "Sırada bulunan şarkıları gösterir")
+        .setDMPermission(false),
+    async execute(interaction) {
+        music.execute(interaction, ["queue"]);
     }
 }

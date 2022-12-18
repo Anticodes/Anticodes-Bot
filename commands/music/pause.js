@@ -1,14 +1,15 @@
-const music = require('./music.js');
+const { SlashCommandBuilder } = require('discord.js');
+const music = require('../../helpers/music.js');
 
 module.exports = {
-    name: 'pause',
-    aliases: ['duraklat', 'durak'],
-    desc: 'Pauses the song until a resume command.',
     dir: 'music',
-    args: false,
-    guildOnly: true,
-    async execute (message, args){
-        args.unshift(this.name);
-        music.execute(message, args);
+    data: new SlashCommandBuilder()
+        .setName("pause")
+        .setNameLocalization("tr", "duraklat")
+        .setDescription("Pauses the song until a resume command")
+        .setDescriptionLocalization("tr", "Şarkıyı devam komudu gelene kadar duraklatır")
+        .setDMPermission(false),
+    async execute(interaction) {
+        music.execute(interaction, ["pause"]);
     }
 }
